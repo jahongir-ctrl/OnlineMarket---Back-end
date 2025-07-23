@@ -15,6 +15,10 @@ model User {
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  favorites Favorite[]
+  cartItems CartItem[] 
+
 }
 
 model Product {
@@ -22,10 +26,68 @@ model Product {
   name        String
   description String
   price       Float
-  image       String
+  image       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+
+  brand       Brand?    @relation(fields: [brandId], references: [id])
+  brandId     Int?
+
+  category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  Int?
+
+
+  favorites Favorite[]
+  cartItems CartItem[] 
+
+
 }
+
+
+model Brand {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[]
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[]
+}
+
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId]) // Чтобы пользователь не мог добавить один товар дважды
+}
+
+
+
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int      @default(1)
+
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId])
+}
+
+
+
+
 
 
 

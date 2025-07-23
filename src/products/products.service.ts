@@ -1,34 +1,43 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
+// product.service.ts
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
-export class ProductsService {
-  constructor(private readonly prisma: PrismaService) {}
+export class ProductService {
+  constructor(private prisma: PrismaService) {}
 
-  async create(dto: CreateProductDto) {
-    return this.prisma.product.create({ data: dto });
-  }
-
-  async findAll() {
-    return this.prisma.product.findMany();
-  }
-
-  async findOne(id: number) {
-    const product = await this.prisma.product.findUnique({ where: { id } });
-    if (!product) throw new NotFoundException(`Product with ID ${id} not found`);
-    return product;
-  }
-
-  async update(id: number, dto: UpdateProductDto) {
-    return this.prisma.product.update({
-      where: { id },
-      data: dto,
+  findAll() {
+    return this.prisma.product.findMany({
+      include: {
+        brand: true,
+        category: true,
+      },
     });
   }
 
-  async remove(id: number) {
-    return this.prisma.product.delete({ where: { id } });
+  findByBrand(brandId: number) {
+    return this.prisma.product.findMany({
+      where: { brandId },
+      include: { brand: true, category: true },
+    });
+  }
+
+  findByCategory(categoryId: number) {
+    return this.prisma.product.findMany({
+      where: { categoryId },
+      include: { brand: true, category: true },
+    });
+  }
+
+  create(data: {
+    name: string;
+    description: string;
+    price: number;
+    brandId: number;
+    categoryId: number;
+  }) {
+    return this.prisma.product.create({
+      data,
+    });
   }
 }
