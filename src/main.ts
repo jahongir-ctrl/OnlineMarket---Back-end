@@ -15,6 +15,6 @@ async function bootstrap() {
     origin: ['http://localhost:3000', 'http://192.168.68.111:3000'], // allow both frontend and backend hosts
     credentials: true,
   });
-  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
+  await app.listen(parseInt(process.env.PORT || '3000'));
 }
 bootstrap();

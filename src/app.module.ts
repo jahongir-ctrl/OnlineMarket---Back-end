@@ -27,11 +27,12 @@ import { CartService } from './cart/cart.service';
 @Module({
   
   imports: [
-    PrismaModule,  // <-- Добавляем PrismaModule в imports
+    PrismaModule,
     AuthModule, 
-    UsersModule, ProductsModule, BrandsModule, CategoriesModule,
-
-    
+    UsersModule,
+   ProductsModule,
+    BrandsModule,
+    CategoriesModule,
   ],
   controllers: [AppController , BrandController, CategoryController , FavoritesController , CartController],
   providers: [AppService , PrismaService, BrandService, CategoryService, FavoritesService , CartService],

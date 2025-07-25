@@ -1,4 +1,3 @@
-// products.controller.ts
 import { Controller, Get, Post, Body, Param, Delete, Put, Query } from '@nestjs/common';
 import { Patch } from '@nestjs/common';
 import { ProductService } from './products.service';
