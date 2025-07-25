@@ -10,6 +10,12 @@ export class CreateProductDto {
   @IsNumber()
   price: number;
 
+  @IsNumber()
+  brandId: number;
+
+  @IsNumber()
+  categoryId: number;
+
   @IsString()
   image: string;
 }

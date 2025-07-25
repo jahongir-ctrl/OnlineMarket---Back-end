@@ -1,14 +1,17 @@
-// product.controller.ts
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+// products.controller.ts
+import { Controller, Get, Post, Body, Param, Delete, Put, Query } from '@nestjs/common';
+import { Patch } from '@nestjs/common';
 import { ProductService } from './products.service';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Controller('products')
 export class ProductController {
   constructor(private productService: ProductService) {}
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  getAll() {
+    return this.productService.getAll();
   }
 
   @Get('by-brand')
@@ -28,7 +31,18 @@ export class ProductController {
     @Body('price') price: number,
     @Body('brandId') brandId: number,
     @Body('categoryId') categoryId: number,
+    @Body('image') image: string,
   ) {
-    return this.productService.create({ name, description, price, brandId, categoryId });
+    return this.productService.create({ name, description, price, brandId, categoryId, image });
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
+    return this.productService.update(+id, dto);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: number) {
+    return this.productService.delete(+id);
   }
 }
